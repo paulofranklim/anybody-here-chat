@@ -1,0 +1,51 @@
+openapi: 3.0.3
+info:
+  title: Anybody Here Chat
+  description: >
+    Sample project with real time chat
+  license:
+    name: MIT
+    url: https://github.com/paulofranklim/anybody-here-chat/blob/main/LICENSE
+  version: 0.0.0
+servers:
+  - url: https://localhost:8080/v0
+tags:
+  - name: Search
+    description: Everything about cart
+
+
+paths:
+  /search:
+    get:
+      tags:
+        - Search
+      summary: Returns the users in the system
+      description: Return the users find with some workds
+      operationId: getUSers
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      description: Users from system
+      type: object
+      properties:
+        users:
+          description: Collection of user.
+          type: array
+          items:
+            $ref: '#/components/schemas/UserType'
+    UserType:
+      description: Properties from user
+      type: object
+      properties:
+        userName:
+          description: User name
+          type: string
