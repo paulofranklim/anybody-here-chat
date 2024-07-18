@@ -2,50 +2,87 @@ openapi: 3.0.3
 info:
   title: Anybody Here Chat
   description: >
-    Sample project with real time chat
+    A robust and scalable real-time chat application
   license:
     name: MIT
     url: https://github.com/paulofranklim/anybody-here-chat/blob/main/LICENSE
-  version: 0.0.0
+  version: 0.0.1
 servers:
-  - url: https://localhost:8080/v0
+  - url: http://anybodyhere.chat
 tags:
-  - name: Search
-    description: Everything about cart
-
+  - name: contact
+    description: contact domain implementation
 
 paths:
-  /search:
+  /contact:
+    post:
+      tags:
+        - contact
+      summary: Add a new contact to user contacts list
+      description: Add a new contact to user contacts list
+      operationId: addContact
+      requestBody:
+        description: Add a new contact to user contacts list
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: Contact added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericResponse'
+        '400':
+          description: Invalid input
+
+  /contact/{userId}:
     get:
       tags:
-        - Search
-      summary: Returns the users in the system
-      description: Return the users find with some workds
-      operationId: getUSers
+        - contact
+      summary: Finds all contacts by user
+      description: Return a list of all user's contacts
+      operationId: getUserContacts
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user that needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        200:
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/GenericResponse'
+        '400':
+          description: Invalid user id
+
 components:
   schemas:
-    User:
-      description: Users from system
+    GenericResponse:
+      description: The generic api response
       type: object
       properties:
-        users:
-          description: Collection of user.
-          type: array
-          items:
-            $ref: '#/components/schemas/UserType'
-    UserType:
-      description: Properties from user
-      type: object
-      properties:
-        userName:
-          description: User name
+        summary:
           type: string
+        data:
+          type: object
+
+    ContactRequestDTO:
+      description: The new contact to add request
+      type: object
+      properties:
+        userId:
+          description: User id
+          type: integer
+          format: int64
+        contactId:
+          description: Contact id
+          type: integer
+          format: int64
