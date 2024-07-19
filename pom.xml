@@ -118,6 +118,12 @@
             <version>2.2.22</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>jakarta.validation</groupId>
@@ -167,11 +173,58 @@
                                 <openApiNullable>false</openApiNullable>
                                 <interfaceOnly>true</interfaceOnly>
                                 <useSpringBoot3>true</useSpringBoot3>
+                                <useSwaggerUI>true</useSwaggerUI>
                             </configOptions>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+            <groupId>se.bjurr.gitchangelog</groupId>
+            <artifactId>git-changelog-maven-plugin</artifactId>
+            <version>2.1.0</version>
+            <executions>
+                <execution>
+                    <id>GenerateGitChangelog</id>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>git-changelog</goal>
+                    </goals>
+                    <configuration>
+                        <templateContent>
+                            <![CDATA[
+{{#tags}}
+{{#ifReleaseTag .}}
+## [{{name}}] ({{tagDate .}})
+
+  {{#ifContainsType commits type='feat'}}
+### Features
+
+    {{#commits}}
+      {{#ifCommitType . type='feat'}}
+ - {{#eachCommitScope .}} **{{.}}** {{/eachCommitScope}} {{{commitDescription .}}} ([{{hash}}](https://gitservice/commit/{{hashFull}}))
+      {{/ifCommitType}}
+    {{/commits}}
+  {{/ifContainsType}}
+
+  {{#ifContainsType commits type='fix'}}
+### Bug Fixes
+
+    {{#commits}}
+      {{#ifCommitType . type='fix'}}
+ - {{#eachCommitScope .}} **{{.}}** {{/eachCommitScope}} {{{commitDescription .}}} ([{{hash}}](https://gitservice/commit/{{hashFull}}))
+      {{/ifCommitType}}
+    {{/commits}}
+  {{/ifContainsType}}
+
+{{/ifReleaseTag}}
+{{/tags}}
+         ]]>
+                        </templateContent>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
         </plugins>
     </build>
 
