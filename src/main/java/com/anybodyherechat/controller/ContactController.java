@@ -1,5 +1,6 @@
 package com.anybodyherechat.controller;
 
+import com.anybodychat.api.ContactApi;
 import com.anybodyherechat.model.ContactRequestDTO;
 import com.anybodyherechat.model.GenericResponse;
 import com.anybodyherechat.service.ContactService;
