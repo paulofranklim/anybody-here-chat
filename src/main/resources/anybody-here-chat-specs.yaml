@@ -12,6 +12,10 @@ servers:
 tags:
   - name: contact
     description: contact domain implementation
+  - name: Authorization
+    description: Endpoints to manager the authorization and user session.
+  - name: ManagerPassword
+    description: Endpoints to manager the password by the user
 
 paths:
   /contact:
@@ -62,7 +66,65 @@ paths:
                 $ref: '#/components/schemas/GenericResponse'
         '400':
           description: Invalid user id
-
+  /auth/sign-up:
+    post:
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestBody'
+        description: Create a new user
+      responses:
+        '200':
+          description: The account was created successfully.
+        '400':
+          description: Bad request.
+        '500':
+          description: Error when create the account
+      summary: Create a new user account
+      tags:
+        - Authorization
+  /auth/login:
+    post:
+      operationId: loginUser
+      responses:
+        '200':
+          description: Authenticate successfully and return the access token.
+        '401':
+          description: Authenticate error. The user or password is not valid.
+        '500':
+          description: Not implemented yet
+      summary: Authenticate a valid and existing user.
+      tags:
+        - Authorization
+  /auth/logout:
+    post:
+      operationId: logoutUser
+      responses:
+        '200':
+          description: User session was closed
+        '401':
+          description: Error when trying to finish the user session. The token is not valid or has expired.
+        '500':
+          description: Not implemented yet
+      summary: Close the user session
+      tags:
+        - Authorization
+  /auth/reset-password:
+    put:
+      operationId: updatePassword
+      responses:
+        '200':
+          description: The password was updated
+        '400':
+          description: Error when update the password
+        '500':
+          description: Not implemented yet
+      summary: Enable the user update your password
+      tags:
+        - ManagerPassword
 components:
   schemas:
     GenericResponse:
@@ -86,3 +148,35 @@ components:
           description: Contact id
           type: integer
           format: int64
+    UsernameType:
+      description: Expected a unique username from the system
+      example: testuser
+      maxLength: 30
+      minLength: 3
+      pattern: ^[a-zA-Z0-9]$
+      type: string
+    PasswordType:
+      description: Expected password from the user
+      format: password
+      type: string
+    EmailType:
+      description: Expected a unique email for the user
+      format: email
+      maxLength: 254
+      minLength: 3
+      type: string
+    UserRequestBody:
+      description: Essential data for create a new user on system
+      required:
+        - username
+        - email
+        - password
+      type: object
+      properties:
+        username:
+          $ref: '#/components/schemas/UsernameType'
+        password:
+          $ref: '#/components/schemas/PasswordType'
+        email:
+          $ref: '#/components/schemas/EmailType'
+      additionalProperties: false
