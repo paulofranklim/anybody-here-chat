@@ -20,7 +20,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 @Tag("IntegrationTest")
 @WebMvcTest(AuthenticationController.class)
 @Import(SecurityConfig.class)
-public class AuthenticationControllerIT {
+class AuthenticationControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -29,7 +29,7 @@ public class AuthenticationControllerIT {
     private AuthenticationService mockAuthenticationService;
 
     @Test
-    public void create_user_with_sucess() throws Exception {
+    void create_user_with_success() throws Exception {
         Mockito.doNothing().when(mockAuthenticationService).saveNewUser(Mockito.any(UserRequestBody.class));
         UserRequestBody requestBody = new UserRequestBody();
         requestBody.setEmail("xxxx@xxx.com");
@@ -46,7 +46,7 @@ public class AuthenticationControllerIT {
     }
 
     @Test
-    public void request_to_create_user_is_not_valid() throws Exception {
+    void request_to_create_user_is_not_valid() throws Exception {
         Mockito.doNothing().when(mockAuthenticationService).saveNewUser(Mockito.any(UserRequestBody.class));
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/sign-up")
                                               .contentType(MediaType.APPLICATION_JSON)
