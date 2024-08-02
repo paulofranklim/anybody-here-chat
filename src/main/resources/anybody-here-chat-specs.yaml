@@ -10,7 +10,7 @@ info:
 servers:
   - url: http://anybodyhere.chat
 tags:
-  - name: contact
+  - name: Contact
     description: contact domain implementation
   - name: Authorization
     description: Endpoints to manager the authorization and user session.
@@ -21,7 +21,7 @@ paths:
   /contact:
     post:
       tags:
-        - contact
+        - Contact
       summary: Add a new contact to user contacts list
       description: Add a new contact to user contacts list
       operationId: addContact
@@ -45,7 +45,7 @@ paths:
   /contact/{userId}:
     get:
       tags:
-        - contact
+        - Contact
       summary: Finds all contacts by user
       description: Return a list of all user's contacts
       operationId: getUserContacts
@@ -135,7 +135,6 @@ components:
           type: string
         data:
           type: object
-
     ContactRequestDTO:
       description: The new contact to add request
       type: object
@@ -180,3 +179,13 @@ components:
         email:
           $ref: '#/components/schemas/EmailType'
       additionalProperties: false
+    ChatMessageDTO:
+      description: The chat message object
+      type: object
+      properties:
+        sender:
+          description: The user sender message
+          type: string
+        content:
+          description: The content of the message
+          type: string
